@@ -28,3 +28,17 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
 
+
+
+Outputs:
+  ServerDNS:
+    Description:
+      The Server DNS
+    Value: !GetAtt
+      - EC2Instance
+      - PublicBnsName
+
+Parameters:
+  NameOfParameter:
+    Description: "The name of the service this stack is to be used for"
+    Type: String # Type always required attribute of Parameters. Can accept: String, Number, List<Number>, CommaDelimitedList, AWS-specific Types (AWS::EC2::Image::ID), Systems Manager Parameter types
