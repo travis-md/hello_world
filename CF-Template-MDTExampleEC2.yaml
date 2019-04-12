@@ -1,0 +1,9 @@
+Resources:
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0080e4c5bc078760e # Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type in  N.Virginia
+      Tags:
+        - Key: User-Name
+          Value: Morgan
