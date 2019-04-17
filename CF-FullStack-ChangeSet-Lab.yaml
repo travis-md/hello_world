@@ -22,8 +22,6 @@ Mappings:
         AMI: ami-05b3bcf7f311194b3 # Amazon Linux AMI in Singapore
       ap-southeast-2:
         AMI: ami-02fd0b06f06d93dfc # Amazon Linux AMI in Sydney
-
-
 Resources:
   ALBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -40,8 +38,8 @@ Resources:
     Properties:
       SecurityGroups:
         - !Ref ALBSecurityGroup
-        Subnets: !Ref SubnetIds
-  LoadBalancerListener:
+      Subnets: !Ref SubnetIds
+  LoadBalancerListener: # Port 80 Listener for ALB
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       LoadBalancerArn: !Ref LoadBalancer
@@ -58,7 +56,7 @@ Resources:
       Protocol: HTTP
       VpcId: !Ref VpcId
   AutoScalingGroup:
-    Type: AWS::AutocScaling::AutoScalingGroup
+    Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       AvailabiltyZones: !GetAZs
       LaunchConfigurationName: !Ref LaunchConfiguration
