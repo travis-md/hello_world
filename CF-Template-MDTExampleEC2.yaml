@@ -22,6 +22,22 @@ Mappings:
 Resources:
   Ec2Instance:
     Type: 'AWS::EC2::Instance'
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          packages:
+            yum:
+              httpd: []
+              php: []
+          files:
+            /var/www/html/index.php:
+              content: !Sub |
+                <?php print "Hello world, Morgan is here in the Digital Stratosphere!"; ?>
+          services:
+            sysvinit:
+              httpd:
+                enabled: true
+                ensurerunnning: true
     Properties:
       InstanceType: t2.micro
       ImageId: !FindInMap
@@ -35,11 +51,14 @@ Resources:
       SecurityGroups:
         - !Ref MySecurityGroup
       UserData:
-        !Base64 |
-          #!/bin/bash -xe
-          yum update -y
-          yum install httpd -y
-          service httpd start
+        'Fn::Base64':
+          !Sub |
+            #!/bin/bash -xe
+            yum update -y
+            # Ensure AWS CFN Bootstrap is the latest
+            yum install -y aws-cfn-boostrap
+            # Install the files and packages from the metadata
+            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource EC2Instance --region ${AWS::Region}
   MySecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -49,8 +68,10 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: 0.0.0.0/0
-
-
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
 Outputs:
   ServerIp:
     Description:
@@ -58,5 +79,8 @@ Outputs:
     Value: !GetAtt
       - Ec2Instance
       - PublicIp
-
+  Website:
+    Description:
+      Tbe Public DNS for the EC2 Instance
+    Value: !Sub 'http://${Ec2Instance.PublicDnsName}'
 
