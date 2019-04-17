@@ -7,18 +7,18 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
 Mappings:
   RegionMap:
-    us-east-1:
-      AMI: ami-0080e4c5bc078760e # Amazon Linux AMI in N. Virginia
-    us-east-2:
-      AMI: ami-0cd3dfa4e37921605 # Amazon Linux AMI in Ohio
-    us-west-1:
-      AMI: ami-0ec6517f6edbf8044 # Amazon Linux AMI in N. California
-    eu-north-1:
-      AMI: ami-86fe70f8 # Amazon Linux AMI in Sweden
-    ap-southeast-1:
-      AMI: ami-05b3bcf7f311194b3 # Amazon Linux AMI in Singapore
-    ap-southeast-2:
-      AMI: ami-02fd0b06f06d93dfc # Amazon Linux AMI in Sydney
+      us-east-1:
+        AMI: ami-0080e4c5bc078760e # Amazon Linux AMI in N. Virginia
+      us-east-2:
+        AMI: ami-0cd3dfa4e37921605 # Amazon Linux AMI in Ohio
+      us-west-1:
+        AMI: ami-0ec6517f6edbf8044 # Amazon Linux AMI in N. California
+      eu-north-1:
+        AMI: ami-86fe70f8 # Amazon Linux AMI in Sweden
+      ap-southeast-1:
+        AMI: ami-05b3bcf7f311194b3 # Amazon Linux AMI in Singapore
+      ap-southeast-2:
+        AMI: ami-02fd0b06f06d93dfc # Amazon Linux AMI in Sydney
 Resources:
   Ec2Instance:
     Type: 'AWS::EC2::Instance'
@@ -34,6 +34,12 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroups:
         - !Ref MySecurityGroup
+      UserData:
+        !Base64 |
+          #!/bin/bash -xe
+          yum update -y
+          yum install httpd -y
+          service httpd start
   MySecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
