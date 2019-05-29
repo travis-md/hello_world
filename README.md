@@ -2,4 +2,4 @@
 learning github
 
 
-I'm learning GitHub alongside Python and data sciene and AI and DEvOps to drive strategy that chages the world!
+I'm learning GitHub alongside Python and Serverless Architectures, AI, and DevOps to drive awesome companies and strategy that changes the world!
